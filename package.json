@@ -1,0 +1,15 @@
+{
+  "name": "firefox-ext-legacydeck",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "web-ext-types": "^3.2.1"
+  }
+}
