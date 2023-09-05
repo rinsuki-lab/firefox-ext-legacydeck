@@ -1,10 +1,15 @@
 {
     "manifest_version": 2,
-    "name": "legacydeck",
+    "name": "LegacyDeck",
     "version": "0.1.0",
     "background": {
         "scripts": ["rewrite.js"]
     },
     "web_accessible_resources": ["decider.json", "version.json"],
-    "permissions": ["cookies", "webRequest", "webRequestBlocking", "https://tweetdeck.twitter.com/*", "https://web.archive.org/web/*"]
+    "permissions": ["cookies", "webRequest", "webRequestBlocking", "https://tweetdeck.twitter.com/*", "https://web.archive.org/web/*"],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "webext-legacydeck@rinsuki.net"
+        }
+    }
 }
