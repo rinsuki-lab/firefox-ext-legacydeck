@@ -1,11 +1,11 @@
 {
     "manifest_version": 2,
     "name": "LegacyDeck",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "background": {
         "scripts": ["rewrite.js"]
     },
-    "web_accessible_resources": ["decider.json", "version.json"],
+    "web_accessible_resources": ["decider.json", "version.json", "page.js"],
     "permissions": ["cookies", "webRequest", "webRequestBlocking", "https://tweetdeck.twitter.com/*", "https://web.archive.org/web/*"],
     "browser_specific_settings": {
         "gecko": {

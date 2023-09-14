@@ -15,6 +15,7 @@ browser.webRequest.onBeforeRequest.addListener(async details => {
     responseRewriter.onstart = () => {
         if (resArrayBufferHashString === EXPECTED_SHA512_OF_HTML) {
             responseRewriter.write(resArrayBuffer)
+            responseRewriter.write(new TextEncoder().encode(`<script src="${browser.runtime.getURL("page.js")}"></script>`))
         } else {
             responseRewriter.write(new TextEncoder().encode("Error: Failed to verify assets from web.archive.org.<br>from LegacyDeck Extension"))
         }

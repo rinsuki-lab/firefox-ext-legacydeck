@@ -1,11 +1,20 @@
 lockfileVersion: '6.0'
 
 devDependencies:
+  typescript:
+    specifier: ^5.2.2
+    version: 5.2.2
   web-ext-types:
     specifier: ^3.2.1
     version: 3.2.1
 
 packages:
+
+  /typescript@5.2.2:
+    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
 
   /web-ext-types@3.2.1:
     resolution: {integrity: sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==}
