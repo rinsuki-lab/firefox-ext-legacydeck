@@ -5,8 +5,13 @@
     "background": {
         "scripts": ["rewrite.js"]
     },
+    "content_scripts": [{
+        "matches": ["https://tweetdeck.twitter.com/*"],
+        "js": ["content.js"],
+        "run_at": "document_start"
+    }],
     "web_accessible_resources": ["decider.json", "version.json", "page.js"],
-    "permissions": ["cookies", "webRequest", "webRequestBlocking", "https://tweetdeck.twitter.com/*", "https://web.archive.org/web/*"],
+    "permissions": ["cookies", "webRequest", "webRequestBlocking", "https://tweetdeck.twitter.com/*", "https://web.archive.org/web/*", "storage"],
     "browser_specific_settings": {
         "gecko": {
             "id": "webext-legacydeck@rinsuki.net",

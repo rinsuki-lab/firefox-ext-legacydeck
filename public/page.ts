@@ -1,4 +1,20 @@
+interface Window {
+    __LegacyDeckLoaded: number
+}
+
 (() => {
+const main = (scriptTag: HTMLOrSVGScriptElement) => {
+    if (window.XMLHttpRequest.toString().startsWith("function () {")) {
+        if (window.__LegacyDeckLoaded != null && (performance.now() - window.__LegacyDeckLoaded) > 1000) {
+            location.reload()
+            return
+        }
+        alert("WARNING: someone overriding XMLHttpRequest already (or loading LegacyDeck twice), it might be causes some weird errors.")
+        return
+    }
+    window.__LegacyDeckLoaded = performance.now()
+    scriptTag.remove()
+
     // @ts-expect-error
     const proxyLogger = (o: unknown, key: string) => new Proxy(o, {
         get(target, k) {
@@ -27,7 +43,7 @@
 
     function parseFromLocalStorage(key: string, fallback: string): any {
         try {
-            return JSON.parse(localStorage.getItem(key) ?? fallback)
+            return JSON.parse(scriptTag.dataset[key] ?? fallback)
         } catch(e) {
             console.error(e)
             alert(`FAILED TO READ ${key}`)
@@ -35,13 +51,18 @@
         }
     }
 
+    function setToStorage(key: ReturnType<typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS]>, value: string) {
+        scriptTag.dataset[key] = value
+        if (debugLogging) console.log(scriptTag)
+    }
+
     const { promise: userIdPromise, resolve: resolveUserId } = Promise.withResolvers<string>()
 
     const STORAGE_KEYS = {
-        COLUMNS: (userId: string) => `LEGACYDECK:${userId}:COLUMNS`,
-        FEEDS: (userId: string) => `LEGACYDECK:${userId}:FEEDS`,
-        SETTINGS_COLUMN_IDS: (userId: string) => `LEGACYDECK:${userId}:COLUMN_IDS`,
-        SETTINGS: (userId: string) => `LEGACYDECK:${userId}:SETTINGS`,
+        COLUMNS: (userId: string) => `LEGACYDECK:${userId}:COLUMNS` as const,
+        FEEDS: (userId: string) => `LEGACYDECK:${userId}:FEEDS` as const,
+        SETTINGS_COLUMN_IDS: (userId: string) => `LEGACYDECK:${userId}:COLUMN_IDS` as const,
+        SETTINGS: (userId: string) => `LEGACYDECK:${userId}:SETTINGS` as const,
     }
     
     window.XMLHttpRequest = new Proxy(window.XMLHttpRequest, {
@@ -112,8 +133,8 @@
                                 mtime = new Date()
                                 const bodyJSON = JSON.parse(body)
                                 userIdPromise.then(userId => {
-                                    if (bodyJSON.settings) localStorage.setItem(STORAGE_KEYS.SETTINGS(userId), JSON.stringify(bodyJSON.settings))
-                                    if (bodyJSON.columns) localStorage.setItem(STORAGE_KEYS.SETTINGS_COLUMN_IDS(userId), JSON.stringify(bodyJSON.columns))
+                                    if (bodyJSON.settings) setToStorage(STORAGE_KEYS.SETTINGS(userId), JSON.stringify(bodyJSON.settings))
+                                    if (bodyJSON.columns) setToStorage(STORAGE_KEYS.SETTINGS_COLUMN_IDS(userId), JSON.stringify(bodyJSON.columns))
                                     console.log("sendbody", body)
                                     ret(body)
                                 })
@@ -147,7 +168,7 @@
                                     }
                                     overridedRes = JSON.stringify(ids)
 
-                                    localStorage.setItem(STORAGE_KEYS.FEEDS(userId), JSON.stringify(feeds))
+                                    setToStorage(STORAGE_KEYS.FEEDS(userId), JSON.stringify(feeds))
                                     ret(body)
                                 })
                             }
@@ -179,7 +200,7 @@
                                         columns[id] = feed
                                     }
                                     overridedRes = JSON.stringify(ids)
-                                    localStorage.setItem(STORAGE_KEYS.COLUMNS(userId), JSON.stringify(columns))
+                                    setToStorage(STORAGE_KEYS.COLUMNS(userId), JSON.stringify(columns))
 
                                     ret(body)
                                 })
@@ -225,6 +246,13 @@
             })
         }
     })
+}
 
-    document.currentScript?.remove()
+const cs = document.currentScript
+if (cs != null) {
+    main(cs)
+} else {
+    alert("LegacyDeck(page): script tag not found")
+}
+    
 })()
