@@ -9,7 +9,8 @@
     "permissions": ["cookies", "webRequest", "webRequestBlocking", "https://tweetdeck.twitter.com/*", "https://web.archive.org/web/*"],
     "browser_specific_settings": {
         "gecko": {
-            "id": "webext-legacydeck@rinsuki.net"
+            "id": "webext-legacydeck@rinsuki.net",
+            "strict_min_version": "121.0"
         }
     }
 }
