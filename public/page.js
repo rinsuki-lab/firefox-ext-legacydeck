@@ -3,10 +3,14 @@
     const main = (scriptTag) => {
         if (window.XMLHttpRequest.toString().startsWith("function () {")) {
             if (window.__LegacyDeckLoaded != null && (performance.now() - window.__LegacyDeckLoaded) > 1000) {
-                location.reload();
+                if (confirm("LegacyDeck is updated to latest version. Do you want to reload this page to apply it?")) {
+                    location.reload();
+                }
                 return;
             }
-            alert("WARNING: someone overriding XMLHttpRequest already (or loading LegacyDeck twice), it might be causes some weird errors.");
+            if (confirm("WARNING: someone overriding XMLHttpRequest already (or loading LegacyDeck twice/updating LegacyDeck addon), it might be causes some weird errors.\n\nYou might be want to reload if LegacyDeck addon is updated.\n\nDo you want to reload this page?")) {
+                location.reload();
+            }
             return;
         }
         window.__LegacyDeckLoaded = performance.now();
